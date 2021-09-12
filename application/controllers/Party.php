@@ -30,7 +30,7 @@ class Party extends CI_Controller{
 			->field_type('i_e','dropdown',array('I'=>'Inter Branch', 'E'=>'External'))
 			->field_type('state','dropdown',array('I'=>'Inside State','O'=>'Outside State'))
 			->field_type('status', 'dropdown', array('REGD'=>'Registered', 'UNRD'=>'Un Registered', 'COMP'=>'Composition Dealer'))
-			->set_lang_string('delete_error_message', 'This data cannot be deleted, because there are still a constrain data, please delete that constrain data first.');
+			->set_lang_string('delete_error_message', 'This data cannot be deleted, because there is still a constrain data, please delete that constrain data first.');
 			$crud->callback_before_delete(array($this,'delete_check'));
 			
 
@@ -39,29 +39,26 @@ class Party extends CI_Controller{
 			if( $operation == 'add' || $operation == 'insert' || $operation == 'insert_validation'):
 				$crud->required_fields('name','code', 'city', 'i_e', 'state', 'status');
 				$crud->callback_before_insert(array($this,'toupper'));
-				//$crud->set_rules('code', 'Party Code', 'trim|required|is_unique[party.code]');
+			
 			elseif($operation == 'edit' || $operation == 'update' || $operation == 'update_validation'):
 				if ($this->check_in_use($crud->getStateInfo()->primary_key)):
 					$crud->required_fields('city');
 					$crud->callback_before_update(array($this,'toupper'));
-					//$crud->field_type('gstno', 'readonly');
+			
 					$crud->field_type('i_e', 'readonly');
 					$crud->field_type('code', 'readonly');
 					$crud->field_type('name', 'readonly');
 					$crud->field_type('state', 'readonly');
-					//$crud->field_type('status', 'readonly');
+			
 				else:
 					$crud->required_fields('name', 'code', 'city', 'i_e', 'state', 'status');
 					$crud->callback_before_update(array($this,'toupper'));
-					//$crud->set_rules('code', 'Party Code', 'trim|required|is_unique[party.code]');
 				endif;
 			
 			
 			endif;
             
-            //$crud->unset_jquery();
-			//$crud->unset_jquery_ui();
-		
+            
 		$output = $crud->render();
 		$this->_example_output($output);                
 	}
@@ -71,7 +68,6 @@ class Party extends CI_Controller{
 	{
 	foreach ($post_array as $k=>$v):
 	$post_array[$k]=strtoupper($v);
-	//$post_array['title']=strtoupper($post_array['title']);
 	endforeach;
 	return $post_array;
 	

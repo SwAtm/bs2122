@@ -32,7 +32,6 @@ class Trnf_details_model extends CI_Model{
 	$sql = $this->db->select('trnf_details.quantity, trnf_details.item_id, item.title, trnf_details.rate ');
 	$sql = $this->db->from('trnf_details');
 	$sql = $this->db->join('item','item.id = trnf_details.item_id');
-	//$sql = $this->db->join('inventory','inventory.id = trnf_details.inventory_id');
 	$sql = $this->db->where('trnf_details.trnf_summ_id',$pk);
 	$sql = $this->db->get();
 	return $sql->result_array();

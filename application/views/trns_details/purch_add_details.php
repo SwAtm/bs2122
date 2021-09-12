@@ -16,19 +16,6 @@
 	}
 </script>
 <style>
-	/* Chrome, Safari, Edge, Opera */
-/*
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-/*
-input[type=number] {
-  -moz-appearance: textfield;
-}*/
 #tb {
 table-layout: fixed;
 width: 100%;
@@ -37,7 +24,6 @@ border: 1px solid black;
 th, tr {
 border: 1px solid black;	
 }
-
 </style>
 
 <table id = "tb">
@@ -65,7 +51,9 @@ echo "</select>";
 <td><input type = number size = 15 maxlength = "14" name = hsn required></td>
 <td><input type = number size = 15 name = gst_rate required step = 0.01 placeholder = 0.00></td>
 <td><input type = submit name = add value = Add></td></tr>
-<tr><td colspan = 8 align = center><input type = submit name =  complete id = complete formnovalidate="formnovalidate" value = 'Bill Over'></td></tr>
+<tr><td colspan = 4 align = center><input type = submit name =  complete id = complete formnovalidate="formnovalidate" value = 'Bill Over'></td>
+<td colspan = 4 align = center><input type = submit name =  cancel id = cancel formnovalidate="formnovalidate" value = 'Cancel Bill'></td>
+</tr>
 <?php
 echo "</form>";
 echo "</table>";

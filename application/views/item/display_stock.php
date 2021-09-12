@@ -11,7 +11,7 @@ else:
 $this->table->set_template($template);
 	$this->table->set_caption($stock[0]['title']);
 	$this->table->set_heading('Item Id','Title','Inventory ID','Rate','Closing Balance','');
-	//echo "Title: ".$stock[0]['title']." Id: ".$stock[0]['id']."<br>";
+
 	foreach ($stock as $st):
 		$extra_col = "<a href =".site_url("item/det_stck/$st[id]/$st[rate]").">View Details</a href>";
 		$row_to_add = array($st['id'], $st['title'], $st['iid'], $st['rate'], $st['clbal'], $extra_col);

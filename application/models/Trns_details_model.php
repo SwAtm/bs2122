@@ -6,7 +6,7 @@ class Trns_details_model extends CI_Model{
 	}
 
 	public function add($data){
-	//called by trns_details/other_complete_details, trns_details/edit_purchase_add, trns_details/edit_other_add, trns_details/purch_complete_details
+	//called by trns_details/sales_complete_details, trns_details/edit_purchase_add, trns_details/edit_sales_add, trns_details/purch_complete_details
 	if($this->db->insert('trns_details',$data)):
 		return true;
 	else:
@@ -33,13 +33,8 @@ class Trns_details_model extends CI_Model{
 		$sql = $this->db->from('trns_details as td');
 		$sql = $this->db->join('item','item.id = td.item_id');
 		$sql = $this->db->join('inventory','td.inventory_id = inventory.id');
-		//$sql = $this->db->join('trnf_details','trnf_details.inventory_id = inventory.id');
-		//$sql = $this->db->join('profo_details','profo_details.inventory_id = inventory.id');
 		$sql = $this->db->where('td.trns_summary_id',$pk);
 		$sql = $this->db->where('inventory.out_qty',0);
-		/*$sql = $this->db->where('count(trns_details.id)',1);
-		$sql = $this->db->where('count(trnf_details.id)',0);
-		$sql = $this->db->where('count(profo_details.id)',0);*/
 		$sql = $this->db->get();
 		return $sql->result_array();
 }
@@ -60,7 +55,7 @@ class Trns_details_model extends CI_Model{
 
 
 	public function delete($id){
-		//called by trns_details/edit_purchase_add, trns_details/edit_other_add
+		//called by trns_details/edit_purchase_add, trns_details/edit_sales_add
 		$sql = $this->db->where('id',$id);
 		if ($sql = $this->db->delete('trns_details')):
 			return true;

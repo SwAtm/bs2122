@@ -6,7 +6,7 @@ class Trns_summary_model extends CI_Model{
 	}
 
 	public function get_max_no($sr){
-	//called by trns_details/other_complete_details, trns_details/purch_complete_details
+	//called by trns_details/sales_complete_details, trns_details/purch_complete_details
 	$sql=$this->db->select_max('no');
 	$sql=$this->db->from('trns_summary');
 	$sql=$this->db->where('series',$sr);
@@ -15,7 +15,7 @@ class Trns_summary_model extends CI_Model{
 	}
 
 	public function add($data){
-	//called by trns_details/other_complete_details, trns_details/purch_complete_details
+	//called by trns_details/sales_complete_details, trns_details/purch_complete_details
 	if($this->db->insert('trns_summary',$data)):
 		return true;
 	else:
@@ -25,7 +25,7 @@ class Trns_summary_model extends CI_Model{
 	}
 
 	public function get_max_id(){
-	//called by trns_details/other_complete_details, trns_details/purch_complete_details
+	//called by trns_details/sales_complete_details, trns_details/purch_complete_details
 	$sql=$this->db->select_max('id');
 	$sql=$this->db->from('trns_summary');
 	$sql=$this->db->get();
@@ -33,7 +33,7 @@ class Trns_summary_model extends CI_Model{
 	}
 
 	public function get_details_by_id($pk){
-		//called by trns_summary/summary1, trns_details/check_editable
+		//called by trns_summary/summary_edit, trns_details/check_editable
 	$sql=$this->db->select('trns_summary.*, series.tran_type_name, series.payment_mode_name');
 	$sql=$this->db->from('trns_summary');
 	$sql=$this->db->join('series','trns_summary.series = series.series');
@@ -43,7 +43,7 @@ class Trns_summary_model extends CI_Model{
 	}
 
 	public function update($data, $id){
-	//called by trns_summary/summary1
+	//called by trns_summary/summary_edit
 	$sql=$this->db->where('id',$id);
 	
 	if($sql=$this->db->update('trns_summary',$data)):

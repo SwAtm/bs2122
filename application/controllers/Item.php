@@ -55,16 +55,13 @@ class Item extends CI_Controller{
 				endif;
 				
 			endif;
-            //$pk=$crud->getStateInfo()->primary_key;
-            //$crud->callback_before_delete(array($this,'delete_check['.$pk.']'));
-            //$crud->unset_jquery();
-            //$crud->unset_jquery_ui();
             $crud->add_action('View Details',base_url('application/view_details.png'),'Item/get_stock');
             $crud->set_lang_string('delete_error_message','This data cannot be deleted, it is used');
             $crud->callback_before_delete(array($this,'delete_check'));
 			
 		
 		$output = $crud->render();
+		$output->extra="<table width = 100% bgcolor=pink><tr><td align = center><a href = ".site_url('item/get_stock_all').">All stock</a href></td></tr></table>";
 		$this->_example_output($output);                
 	}
 
@@ -155,22 +152,26 @@ class Item extends CI_Controller{
 	function _example_output($output = null)
 	{
 		$this->load->view('templates/header');
-		$this->load->view('our_template.php',$output);    
+		$this->load->view('templates/trans_template.php',$output);    
 		$this->load->view('templates/footer');
 	}    
 	
 	function get_stock($id){
-		//echo $id;
-		/*$item=$this->Item_model->get_title($id);
-		$stck_summ=$this->Item_model->stck_summ($id);
-		
-		$data['stck_summ']=$stck_summ;
-		$data['item']=$item;*/
 		$data['stock'] = $this->Inventory_model->itemwise_locationwise_stock($id);
 		$this->load->view('templates/header');
 		$this->load->view('item/display_stock',$data);    
 		$this->load->view('templates/footer');
 	}
+
+	function get_stock_all(){
+		
+		$data['stock'] = $this->Inventory_model->locationwise_stock();
+		$this->load->view('templates/header');
+		$this->load->view('item/display_stock',$data);    
+		$this->load->view('templates/footer');
+	}
+
+
 
 	function det_stck($id, $rate){
 		$id=$this->uri->segment('3');	
@@ -181,15 +182,6 @@ class Item extends CI_Controller{
 		$trans=$this->Trns_details_model->get_trans($id, $rate);
 		$trnf_out = $this->Trnf_details_model->get_trnf_out($id, $rate);
 		$trnf_in = $this->Trnf_details_model->get_trnf_in($id, $rate);
-		echo "<pre>";
-		print_r($opstock);
-		print_r($item);
-		print_r($rate);
-		print_r($id);
-		print_r($trans);
-		print_r($trnf_out);
-		print_r($trnf_in);
-		echo "</pre>";
 		
 		$show_stck=array();
 		$show_stck[]=array('date'=>"0000-00-00",'document'=>"Opening Stock",'qty'=>'', 'balance'=>$opstock);
@@ -217,9 +209,7 @@ class Item extends CI_Controller{
 			$show_stck[$row]['balance']=$stck_bal+$val['qty'];
 			$stck_bal=$show_stck[$row]['balance'];
 		endforeach;
-		echo "<pre>";
-		print_r($show_stck);
-		echo "</pre>";	
+
 		$data['title']=$item;
 		$data['id']=$id;
 		$data['rate']=$rate;
@@ -227,53 +217,8 @@ class Item extends CI_Controller{
 		$this->load->view('templates/header');
 		$this->load->view('item/show_stck',$data);    
 		$this->load->view('templates/footer');
-		//$detstck=$this->Item_model->get_det_stck($iid, $lid);
-		/*
-		echo "<pre>";
-		
-		*/
-		//print_r($trnfs);
-		
-		
-		/*
-		
-		$trnfs=$this->My_Trnf_Details_model->get_trnfs($iid, $lid);
-		$show_stck=array();
-		foreach ($opstock as $row):
-		$show_stck[]=array('date'=>"0000-00-00",'party'=>"Opening Stock",'qty'=>$row['opstck'], 'balance'=>0);
-		endforeach;
-		foreach ($trans as $row):
-		$show_stck[]=array('date'=>$row['date'], 'party'=>$row['tr_code']." ".$row['tr_no']." ".$row['code']." ".$row['name']." ".$row['city'], 'qty'=>$row['quantity'], 'balance'=>0);
-		endforeach;
-		
-		foreach ($trnfs as $row):
-		$show_stck[]=array('date'=>$row['tr_date'], 'party'=>$row['tr_id']." ".$row['description'], 'qty'=>$row['quantity'], 'balance'=>0);
-		endforeach;
-		/*print_r($show_stck);
-		$data['opstock']=$opstock;
-		$data['trans']=$trans;
-		$data['trnfs']=$trnfs;
-		$data['item']=$item;
-		array_multisort(array_column($show_stck, 'date'), SORT_ASC, $show_stck);
-		$stck_bal=0;
-		foreach ($show_stck as $row=>$val):
-			$show_stck[$row]['balance']=$stck_bal+$val['qty'];
-			$stck_bal=$show_stck[$row]['balance'];
-		endforeach;
-		
-			
-		
-		$data['show_stck']=$show_stck;
-		$this->load->view('templates/header');
-		$this->load->view('item/show_stck',$data);    
-		
-		*/
 		
 	}
-		
-	
-	
-	
 	
 
 }

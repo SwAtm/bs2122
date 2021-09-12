@@ -27,7 +27,7 @@
 	
 	
 		<?php
-		echo "<tr><td><form method = POST action = ".site_url("trns_details/other_complete_details").">";
+		echo "<tr><td><form method = POST action = ".site_url("trns_details/sales_complete_details").">";
 		echo "<select name = party id = party required>";
 		echo "<option value = '' >Select Party</option>";
 		foreach ($party as $p):
@@ -41,7 +41,10 @@
 		endforeach;
 		echo "</select>";
 		echo "</td><td><input type = number name = expenses></td><td><input type = text name = remark></td></tr>";
-		echo "<tr><td colspan = 4 align = center><input type = submit name = finalize value = Finalize></td></tr></table>";
+		echo "<tr><td colspan = 2 align = center><input type = submit name = finalize value = Finalize></td>";
+		?>
+		<td align = center colspan="2"><input type = submit name =  cancel id = cancel formnovalidate="formnovalidate" value = 'Cancel Bill'></td></tr></table>
+<?php
 		echo "</form>";
 ?>
 

@@ -15,7 +15,6 @@ echo form_open('Welcome/verify');?>
 <?php
 foreach ($location as $location1):
 echo "<option value=".$location1['id'].">".$location1['name']."</option>";
-//echo "</td></tr><tr><td>";
 endforeach;?>
 </Select>
 <input type = "submit" value = "Submit">
@@ -23,12 +22,5 @@ endforeach;?>
 </p>
 </div>
 
-
-<?php
-//print_r($location);
-
-
-//echo "<a href=".site_url('Welcome/index').">Home</a>";
-?>
 </body>
 </html>

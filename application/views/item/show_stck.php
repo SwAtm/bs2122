@@ -1,10 +1,4 @@
 <html>
-<?php
-//echo "<pre>";
-//print_r($stck_summ);
-//print_r($item);
-//echo "</pre>";
-?>
 <style>
 .header {
   width: 100%;
@@ -40,7 +34,7 @@ echo "<tr><td width=10%>".$row['date']."</td><td width=70%>".$row['document']."<
 endforeach;
 echo "<tr><td colspan=8 align=center><a href=".site_url('Item/item').">Go to Item List</a></td></tr>";
 echo "</table>";
-//echo $row['opstck']+$row['purchase']+$row['qin']-$row['sales']-$row['qout'];
+
 ?>
 </div>
 <script>

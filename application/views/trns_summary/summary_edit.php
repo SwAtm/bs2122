@@ -16,7 +16,7 @@ border: 1px solid black;
 <table id = "tb">
 	<tr><th>Transactino No:</th><th>Date</th><th>Party</th><th>Expenses</th><th>Remark</th></tr>
 <?php echo "<tr><td>$series: $no</td><td>$date</td>";
-echo "<form method = POST action =".site_url("trns_summary/summary1/$pk").">";
+echo "<form method = POST action =".site_url("trns_summary/summary_edit/$pk").">";
 if ($partychange == 'No'):
 echo "<td>$party_name</td>";
 else:

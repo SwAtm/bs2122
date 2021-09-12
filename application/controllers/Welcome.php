@@ -22,7 +22,6 @@ class Welcome extends CI_Controller {
 	{
 			$loc = $this->Location_model->getall();
 			$data['location']=$loc;
-			//$this->load->view('templates/header');
 			$this->load->view('welcome/index',$data);
 		
 	}
@@ -34,29 +33,24 @@ class Welcome extends CI_Controller {
 		$this->index();
 		else:
 		//submitted and ok
+		//Avoid different users logging from multiple tabs
+		
+			if (isset($this->session->loc_id) and !empty($this->session->loc_id)):
+				Die("Sorry, already logged in");
+			else:
 		$id=$_POST['user'];
 		$user=$this->Location_model->getdetails($id);
-		//$GLOBALS['loc_id'] = $user['id'];
-		//$GLOBALS['loc_name'] = $user['name'];
-		//$GLOBALS['loc_auto_bill_no'] = $user['auto_bill_no'];
-		//define("LOC_ID", $user['id']);
 		$this->session->loc_id=$user['id'];
-		//define("LOC_NAME", $user['name']);
 		$this->session->loc_name=$user['name'];
-		//define("LOC_AUTO_BILL_NO", $user['auto_bill_no']);
 		$this->session->loc_auto_bill_no=$user['auto_bill_no'];
-		//$this->load->view('templates/header');
-		//$this->load->view('welcome/start');
-		//setcookie('admin', 'abc', time()+600); 
 		$this->home();
-		//print_r($_SESSION);
-		//echo "<a href=".site_url('Welcome/index').">Home</a href>";
+			endif;
 		endif;
 	}
-		//$this->load->view('welcome_message');
+
 	
 	public function home(){
-		//if ((!null == LOC_NAME)||!empty(LOC_NAME)):
+
 		if (isset($this->session->loc_id)||!empty($this->session->loc_id)):
 		$this->load->view('templates/header');
 		$this->load->view('welcome/home');
@@ -69,12 +63,6 @@ class Welcome extends CI_Controller {
 	public function logout(){
 		unset ($_SESSION);
 		$this->session->sess_destroy();
-		//unset(LOC_NAME);
-		//unset(LOC_ID);
-		//unset(LOC_AUTO_BILL_NO);
-		//unset ($GLOBALS['loc_id']);
-		//unset ($GLOBALS['loc_name']);
-		//unset ($GLOBALS['loc_auto_bill_no']);
 		$this->index();
 	}
 	

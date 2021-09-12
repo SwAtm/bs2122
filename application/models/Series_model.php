@@ -31,11 +31,11 @@ endif;
 	}
 	
 	public function get_series_by_location()	{
-		//called by trns_details/other_complete_details
+		//called by trns_details/sales_complete_details
 	$sql=$this->db->select('*');
 	$sql=$this->db->from('series');
 	$sql=$this->db->where('location_name',$this->session->loc_name);
-	$sql=$this->db->where('tran_type_name !=','purchase');
+	$sql=$this->db->where('tran_type_name','Sales');
 	$sql=$this->db->get();
 	if ($sql and $sql->num_rows()>0):
 	return $sql->result_array();
@@ -46,7 +46,7 @@ endif;
 	}
 
 	public function get_series_details($id){
-		//called by trns_details/other_complete_details
+		//called by trns_details/sales_complete_details, trns_summary/summary_edit
 	$sql=$this->db->select('*');
 	$sql=$this->db->from('series');
 	$sql=$this->db->where('id',$id);
@@ -59,13 +59,9 @@ endif;
 	$sql=$this->db->select('*');
 	$sql=$this->db->from('series');
 	$sql=$this->db->where('location_name',$this->session->loc_name);
-	//$sql=$this->db->where('tran_type_name !=','purchase');
 	$sql=$this->db->get();
-	//if ($sql and $sql->num_rows()>0):
 	return $sql->result_array();
-//else:
-//	return false;
-//endif;
+
 }
 
 }
