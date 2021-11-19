@@ -55,7 +55,7 @@ endif;
 	}
 
 	public function get_all_series_by_location()	{
-		//called by trns_summary/summary
+		//called by trns_summary/summary, reports/tran_report
 	$sql=$this->db->select('*');
 	$sql=$this->db->from('series');
 	$sql=$this->db->where('location_name',$this->session->loc_name);
@@ -63,5 +63,15 @@ endif;
 	return $sql->result_array();
 
 }
+
+	public function get_details_from_series($series){
+	$sql=$this->db->select('*');
+	$sql=$this->db->from('series');
+	$sql=$this->db->where('series', $series);
+	$sql=$this->db->get();
+	return $sql->row_array();
+	
+	
+	}
 
 }

@@ -312,16 +312,18 @@ public function purch_add_details(){
 				//editable
 				//get details
 				//if it is purchase, exclude inventory items with >0 out_qty or having >1 entry in trns_details/ >0 entry in trnf_details/profo_details
+				$details = $this->Trns_details_model->get_details($id);
 				if($tran_type_name == 'Purchase'){
-					$details = $this->Trns_details_model->get_details_to_delete_purchase($id);	
+					//$details = $this->Trns_details_model->get_details_to_delete_purchase($id);	
 					foreach ($details as $k=>$d) {
-						if (!$this->Trns_details_model->confirm_one_entry('inventory_id',$d['inventory_id'])||!$this->Trnf_details_model->confirm_zero_entry('inventory_id',$d['inventory_id'])||!$this->Profo_details_model->confirm_zero_entry('inventory_id',$d['inventory_id'])):
-							unset($details[$k]);
+						if (!$this->Trns_details_model->confirm_one_entry('inventory_id',$d['inventory_id'])||!$this->Trnf_details_model->confirm_zero_entry('inventory_id',$d['inventory_id'])||!$this->Profo_details_model->confirm_zero_entry('inventory_id',$d['inventory_id'])||!$this->Inventory_model->confirm_zero_out_qty($d['inventory_id'])):
+							$details[$k]['delet']=0;
+						else:
+							$details[$k]['delet']=1;
 						endif;
 					}
-				} else	{
-					$details = $this->Trns_details_model->get_details($id);
-				};
+				}
+					
 				//add to session
 				$this->session->details = $details;
 				$this->session->tran_type_name = $tran_type_name;
@@ -336,9 +338,14 @@ public function purch_add_details(){
 				//unsubmitted:
 			if (!isset($_POST) or empty($_POST)):
 				$data['details'] = $this->session->details;
+				$data['tran_type'] = $this->session->tran_type_name;
 				$this->load->view('templates/header');	
 				$this->load->view('trns_details/edit_delet',$data);	
 				$this->load->view('templates/footer');	
+			//cancel
+			elseif (isset($_POST['cancel'])):
+				unset($_SESSION['details']['tran_type_name']['trns_summary_id']);
+				redirect (site_url('Welcome/home'));
 			else:
 				//submitted
 				$deleted = array();
@@ -349,11 +356,11 @@ public function purch_add_details(){
 						if(isset($d['delete']) and $d['delete'] == 1):
 							$deleted[] = $d;
 						else:
-						$retained[] = $d;	
+							$retained[] = $d;	
 						endif;
 					endforeach;
 				endif;
-
+				$this->session->retained = $retained;
 				$this->session->deleted = $deleted;
 				//now we have to send to add
 				$tran_type_name = $this->session->tran_type_name;
@@ -373,10 +380,16 @@ public function purch_add_details(){
 			//using the same view files that are used while adding. Need to identify the calling process in the view file.
 				$data['calling_proc'] = 'edit';
 				$data['item']= $this->Item_model->getall();
+				$data['retained'] = $this->session->retained;
 				$this->session->item = $data['item'];
 				$this->load->view('templates/header');	
 				$this->load->view('trns_details/purch_add_details',$data);	
 				$this->load->view('templates/footer');	
+			//cancel
+			elseif (isset($_POST['cancel'])):
+				unset($_SESSION['details']['tran_type_name']['trns_summary_id']['retained']['deleted']['toadd']['item']);
+				redirect (site_url('Welcome/home'));
+			
 			//to add
 			elseif(isset($_POST['add'])):
 				unset($_POST['add']);
@@ -399,6 +412,10 @@ public function purch_add_details(){
 			//bill is complete.
 				if (isset($this->session->deleted) and !empty($this->session->deleted)):
 					$deleted = $this->session->deleted;
+				
+				endif;
+				if (isset($this->session->retained) and !empty($this->session->retained)):
+						$retained = $this->session->retained;
 				endif;
 				if (isset($this->session->toadd) and !empty($this->session->toadd)):
 					$toadd = $this->session->toadd;
@@ -441,7 +458,17 @@ public function purch_add_details(){
 						$this->Inventory_model->edit_transaction_delete_purchase($d['inventory_id']);
 					endforeach;
 					endif;
+					//retained: In purchase retained will have entries which could not be deleted + which were not deleted. 'which could not be deleted' - in this category, change of quantity is allowed. We will just 
+					//update the quantity and clbal in inventory for each entry,
+					//update the entry in trns_details
+					if (isset($retained) and !empty($retained)):
+					foreach ($retained as $r):
+						$this->Inventory_model->update_purchase_quantity($r['inventory_id'], $r['quantity']);
+						$this->Trns_details_model->update_purchase_quantity($r['id'], $r['quantity']);
+					endforeach;
+					endif;
 				unset($_SESSION['details']);
+				unset($_SESSION['retained']);
 				unset($_SESSION['tran_type_name']);
 				unset($_SESSION['trns_summary_id']);
 				unset($_SESSION['deleted']);
@@ -474,6 +501,11 @@ public function purch_add_details(){
 				$this->load->view('templates/header');	
 				$this->load->view('trns_details/sales_add_details',$data);	
 				$this->load->view('templates/footer');	
+			//cancel
+			elseif (isset($_POST['cancel'])):
+				unset($_SESSION['details']['tran_type_name']['trns_summary_id']['retained']['deleted']['toadd']['invent']);
+				redirect (site_url('Welcome/home'));
+	
 			//to add
 			elseif(isset($_POST['add'])):
 				//unset($_POST['add']);
@@ -539,6 +571,7 @@ public function purch_add_details(){
 					}
 				endif;
 				unset($_SESSION['details']);
+				unset($_SESSION['retained']);
 				unset($_SESSION['tran_type_name']);
 				unset($_SESSION['trns_summary_id']);
 				unset($_SESSION['deleted']);

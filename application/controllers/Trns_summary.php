@@ -48,7 +48,8 @@ class Trns_summary extends CI_Controller{
 				->callback_column('expenses',array($this,'_callback_expenses'))
 				->add_action('Edit Summary',base_url('application/pencil.jpeg'),'','',array($this, 'check_editable'))
 				->add_action('View Details',base_url('application/view_details.png'),'trns_summary/view_details')
-				->add_action('Edi Details',base_url('application/view_details.png'),'trns_details/check_editable');
+				->add_action('Edi Details',base_url('application/view_details.png'),'trns_details/check_editable')
+				->add_action('Print Bill', base_url('application/print.png'), 'reports/print_bill');
 				$series = $this->Series_model->get_all_series_by_location();
 				
 				$s3 = 'series_id = ';
@@ -132,6 +133,7 @@ class Trns_summary extends CI_Controller{
 
 		public function view_details($pk){
 			$data['trns_details'] = $this->Trns_details_model->get_details($pk);
+			$data['expenses'] = $this->Trns_summary_model->get_details_by_id($pk)['expenses'];
 			$this->load->view('templates/header');
 			$this->load->view('trns_details/view_details',$data);
 			$this->load->view('templates/footer');

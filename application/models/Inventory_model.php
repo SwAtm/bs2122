@@ -93,6 +93,7 @@ class Inventory_model extends CI_Model{
 		//$this->db->where('item.id',$id);
 		$this->db->where('invent.location_id', $this->session->loc_id);
 		$this->db->group_by('invent.rate');
+		$this->db->order_by('invent.item_id ASC, rate ASC');
 		$sql = $this->db->get();
 		return $sql->result_array();
 		//return $stock;
@@ -127,4 +128,26 @@ class Inventory_model extends CI_Model{
 		return $sql->row_array();
 		
 	}
+	
+	public function confirm_zero_out_qty($id){
+		//called by trns_details/check_editable
+		$this->db->select('out_qty');
+		$this->db->from('inventory');
+		$this->db->where('id',$id);
+		$sql = $this->db->get();
+		if ($sql->row()->out_qty!=0):
+			return false;
+		else:
+			return true;
+		endif;
+		}
+		
+	public function update_purchase_quantity($inventory_id, $quantity){
+	//called by trns_details/edit_purchase_add
+		$this->db->set('in_qty',$quantity);
+		$this->db->set('clbal','opbal+in_qty-out_qty',false);
+		$this->db->where('id',$inventory_id);
+		$this->db->update('inventory');
+	}	
+	
 }

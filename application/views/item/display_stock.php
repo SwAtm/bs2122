@@ -9,7 +9,7 @@ else:
 );
 
 $this->table->set_template($template);
-	$this->table->set_caption($stock[0]['title']);
+	//$this->table->set_caption($stock[0]['title']);
 	$this->table->set_heading('Item Id','Title','Inventory ID','Rate','Closing Balance','');
 
 	foreach ($stock as $st):

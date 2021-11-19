@@ -26,6 +26,7 @@ border: 1px solid black;
 }
 </style>
 
+
 <table id = "tb">
 <tr><th>Title</th><th style="width: 11%">Rate</th><th style="width: 11%">Quantity</th><th style="width: 11%">Discount</th><th style="width: 11%">Cash Disc</th><th style="width: 11%">HSN</th><th style="width: 11%">GST Rate</th><th style="width: 5%"></th></tr><tr>
 

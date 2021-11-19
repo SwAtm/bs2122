@@ -33,7 +33,7 @@ class Trns_summary_model extends CI_Model{
 	}
 
 	public function get_details_by_id($pk){
-		//called by trns_summary/summary_edit, trns_details/check_editable
+		//called by trns_summary/summary_edit, trns_details/check_editable, reports/print_bill, trns_summary/view_details
 	$sql=$this->db->select('trns_summary.*, series.tran_type_name, series.payment_mode_name');
 	$sql=$this->db->from('trns_summary');
 	$sql=$this->db->join('series','trns_summary.series = series.series');
